@@ -4,13 +4,21 @@ import (
   "os"
   "fmt"
   "log"
+  "time"
   "bufio"
   "bytes"
   "strings"
   "crypto/md5"
 )
 
+func timeTrack(start time.Time) {
+  t := time.Since(start)
+  log.Printf("Executed in %f", t.Minutes())
+}
+
 func main() {
+
+  defer timeTrack(time.Now())
 
   hash := os.Args[1]
 
@@ -35,8 +43,6 @@ func main() {
 
     pass := scanner.Text()
 
-    //fmt.Println("Testing: " + pass + "...")
-
     hashedpass := md5.Sum([]byte(salt+pass))
     hashcount := 0
 
@@ -55,7 +61,7 @@ func main() {
     checkstring := c.String()
 
     if checkstring[0] == hash[12] && checkstring[1] == hash[16] && checkstring[2] == hash[20] && checkstring[3] == hash[24] {
-      fmt.Println(pass + ":" + hash)
+      fmt.Println(hash, pass)
     }
 
   }
